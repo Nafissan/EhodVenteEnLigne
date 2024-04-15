@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhodVenteEnLigne", "EhodVenteEnLigne\EhodVenteEnLigne.csproj", "{2F22671A-71F8-4092-BB83-0A1471C4ECF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhodVenteEnLigneTests", "EhodVenteEnLigne.Tests\EhodVenteEnLigneTests.csproj", "{266F2C9F-CB14-4C0C-BC2B-4363D2D52069}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F22671A-71F8-4092-BB83-0A1471C4ECF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F22671A-71F8-4092-BB83-0A1471C4ECF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F22671A-71F8-4092-BB83-0A1471C4ECF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F22671A-71F8-4092-BB83-0A1471C4ECF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{266F2C9F-CB14-4C0C-BC2B-4363D2D52069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{266F2C9F-CB14-4C0C-BC2B-4363D2D52069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{266F2C9F-CB14-4C0C-BC2B-4363D2D52069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{266F2C9F-CB14-4C0C-BC2B-4363D2D52069}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B49DD4D4-E98F-4780-B8F9-9E4B5F1A0A9C}
+	EndGlobalSection
+EndGlobal

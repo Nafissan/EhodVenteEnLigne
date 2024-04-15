@@ -1,0 +1,37 @@
+﻿@model EhodBoutiqueEnLigne.Models.ViewModels.OrderViewModel
+
+<h2>@Localizer["OrderTitle"]</h2>
+<form asp-action="Index" method="post">
+    <h3>@Localizer["ShipTo"]</h3>
+    <div class="mb-3">
+        <span asp-validation-for="Name" class="text-danger"></span> <!-- Message d'erreur pour le champ Name -->
+        <label>@Localizer["Name"]*:</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <h3>@Localizer["Address"]</h3>
+    <div class="mb-3">
+        <span asp-validation-for="Address" class="text-danger"></span> <!-- Message d'erreur pour le champ Address -->
+        <label>@Localizer["Location"]*:</label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    <div class="row mb-3">
+        <div class="col-4">
+            <span asp-validation-for="City" class="text-danger"></span> <!-- Message d'erreur pour le champ City -->
+            <label>@Localizer["City"]*:</label>
+            <input asp-for="City" class="form-control" />
+        </div>
+        <div class="col-4">
+            <span asp-validation-for="Zip" class="text-danger"></span> <!-- Message d'erreur pour le champ Zip -->
+            <label>@Localizer["Zip"]*:</label>
+            <input asp-for="Zip" class="form-control" />
+        </div>
+        <div class="col-4">
+            <span asp-validation-for="Country" class="text-danger"></span> <!-- Message d'erreur pour le champ Country -->
+            <label>@Localizer["Country"]*:</label>
+            <input asp-for="Country" class="form-control" />
+        </div>
+    </div>
+    <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="@Localizer["CompleteOrder"]" />
+    </div>
+</form>
