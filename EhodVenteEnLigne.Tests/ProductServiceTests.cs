@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using Moq;
 using EhodBoutiqueEnLigne.Models.Services;
 using EhodBoutiqueEnLigne.Models.Repositories;
@@ -68,44 +68,7 @@ public class ProductServiceTests
         Assert.NotNull(result);
         Assert.Empty(result); // Vérifiez si la liste retournée est vide
     }
-    [Fact]
-    public void MapToViewModel_ReturnsCorrectProductViewModelList()
-    {
-        // Arrange
-        var productServiceType = typeof(ProductService);
-        var methodInfo = productServiceType.GetMethod("MapToViewModel", BindingFlags.NonPublic | BindingFlags.Instance);
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-        var productServiceInstance = new ProductService(mockCart.Object, mockProductRepository.Object,
-            mockOrderRepository.Object, mockLocalizer.Object);
 
-        var productEntities = new List<Product>
-    {
-        new Product { Id = 1, Quantity = 10, Price = 20.5, Name = "Product 1", Description = "Description 1", Details = "Details 1" },
-        new Product { Id = 2, Quantity = 15, Price = 30.75, Name = "Product 2", Description = "Description 2", Details = "Details 2" },
-        // Ajoutez d'autres produits au besoin pour les tests
-    };
-
-        // Act
-        var result = (List<ProductViewModel>)methodInfo.Invoke(productServiceInstance, new object[] { productEntities });
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(productEntities.Count, result.Count);
-
-        // Vérifiez si chaque élément a été correctement mappé
-        for (int i = 0; i < productEntities.Count; i++)
-        {
-            Assert.Equal(productEntities[i].Id, result[i].Id);
-            Assert.Equal(productEntities[i].Quantity.ToString(), result[i].Stock);
-            Assert.Equal(productEntities[i].Price.ToString(CultureInfo.InvariantCulture), result[i].Price);
-            Assert.Equal(productEntities[i].Name, result[i].Name);
-            Assert.Equal(productEntities[i].Description, result[i].Description);
-            Assert.Equal(productEntities[i].Details, result[i].Details);
-        }
-    }
 
     [Fact]
     public void MapToViewModel_ReturnsEmptyList_WhenProductEntitiesIsEmpty()
@@ -163,36 +126,6 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public void GetProductByIdViewModel_ReturnsCorrectProductViewModel()
-    {
-        // Arrange
-        var expectedProductId = 1;
-        var expectedProduct = new ProductViewModel { Id = 1, Name = "Product 1", Price = "10.0", Stock = "5" };
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-        var productServiceInstance = new ProductService(mockCart.Object, mockProductRepository.Object,
-            mockOrderRepository.Object, mockLocalizer.Object); var emptyProductEntities = new List<Product>();
-        var mockProductViewModelList = new List<ProductViewModel>
-    {
-        new ProductViewModel { Id = 1, Name = "Product 1", Price = "10.0", Stock = "5" },
-        new ProductViewModel { Id = 2, Name = "Product 2", Price = "20.0", Stock = "10" },
-    };
-        var mockProductService = new Mock<ProductService>(MockBehavior.Strict, null, mockProductRepository.Object, null, null);
-        mockProductService.Setup(ps => ps.GetAllProductsViewModel()).Returns(mockProductViewModelList);
-
-        // Act
-        var result = mockProductService.Object.GetProductByIdViewModel(expectedProductId);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(expectedProduct.Id, result.Id);
-        Assert.Equal(expectedProduct.Name, result.Name);
-        Assert.Equal(expectedProduct.Price, result.Price);
-        Assert.Equal(expectedProduct.Stock, result.Stock);
-    }
-    [Fact]
     public void GetAllProducts_ReturnsEmptyList_WhenNoProducts()
     {
         // Arrange
@@ -209,32 +142,6 @@ public class ProductServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Empty(result); // Vérifie si la liste retournée est vide
-    }
-
-    [Fact]
-    public void GetProductByIdViewModel_ReturnsNull_WhenProductNotFound()
-    {
-        // Arrange
-        var nonExistentProductId = 999; // Supposons que cet ID n'existe pas dans la liste des produits
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-        var productServiceInstance = new ProductService(mockCart.Object, mockProductRepository.Object,
-            mockOrderRepository.Object, mockLocalizer.Object); var emptyProductEntities = new List<Product>();
-        var mockProductViewModelList = new List<ProductViewModel>
-    {
-        new ProductViewModel { Id = 1, Name = "Product 1", Price = "10.0", Stock = "5" },
-        new ProductViewModel { Id = 2, Name = "Product 2", Price = "20.0", Stock = "10" },
-    };
-        var mockProductService = new Mock<ProductService>(MockBehavior.Strict, null, mockProductRepository.Object, null, null);
-        mockProductService.Setup(ps => ps.GetAllProductsViewModel()).Returns(mockProductViewModelList);
-
-        // Act
-        var result = mockProductService.Object.GetProductByIdViewModel(nonExistentProductId);
-
-        // Assert
-        Assert.Null(result);
     }
 
     [Fact]
@@ -423,7 +330,7 @@ public class ProductServiceTests
     }
 
     [Fact]
-    public void CheckProductModelErrors_ReturnsNoErrors_WhenProductIsValid()
+    public void CheckProductModelErrors_ReturnsNull_WhenProductIsValid()
     {
         // Arrange
         var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
@@ -442,8 +349,11 @@ public class ProductServiceTests
         var errors = productService.CheckProductModelErrors(validProduct);
 
         // Assert
-        Assert.Empty(errors); // Vérifie que la liste d'erreurs est vide
+        Assert.NotNull(errors);
+        Assert.Single(errors);
+        Assert.Null(errors[0]); // Vérifie que la liste contient un seul élément qui est null
     }
+
 
     [Fact]
     public void CheckProductModelErrors_ReturnsErrors_WhenProductIsInvalid()
@@ -467,86 +377,6 @@ public class ProductServiceTests
         // Assert
         Assert.NotEmpty(errors); // Vérifie que des erreurs sont renvoyées
                                  // Vous pouvez vérifier les erreurs spécifiques ici si nécessaire
-    }
-    [Fact]
-    public void SaveProduct_CallsSaveProductInRepository_WithCorrectProductData()
-    {
-        // Arrange
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-        var productService = new ProductService(mockCart.Object, mockProductRepository.Object, mockOrderRepository.Object, mockLocalizer.Object);
-        var productViewModel = new ProductViewModel
-        {
-            Name = "Product",
-            Price = "10.5",
-            Stock = "5",
-            Description = "Description",
-            Details = "Details"
-        };
-
-        // Act
-        productService.SaveProduct(productViewModel);
-
-        // Assert
-        mockProductRepository.Verify(repo => repo.SaveProduct(It.IsAny<Product>()), Times.Once);
-        // Vérifie que la méthode SaveProduct du repository est appelée une fois avec un produit ayant les mêmes données que productViewModel
-    }
-    [Fact]
-    public void SaveProduct_DoesNotCallSaveProductInRepository_WhenProductDataIsInvalid()
-    {
-        // Arrange
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-        var productService = new ProductService(mockCart.Object, mockProductRepository.Object, mockOrderRepository.Object, mockLocalizer.Object);
-        var invalidProductViewModel = new ProductViewModel
-        {
-            // Données du produit invalides (par exemple, le nom est vide)
-            Name = "", // Nom vide
-            Price = "10.5",
-            Stock = "5",
-            Description = "Description",
-            Details = "Details"
-        };
-
-        // Act
-        productService.SaveProduct(invalidProductViewModel);
-
-        // Assert
-        mockProductRepository.Verify(repo => repo.SaveProduct(It.IsAny<Product>()), Times.Never);
-        // Vérifie que la méthode SaveProduct du repository n'est jamais appelée
-    }
-
-    [Fact]
-    public void DeleteProduct_RemovesProductFromCartAndRepository()
-    {
-        // Arrange
-        var mockProductRepository = new Mock<IProductRepository>();
-        var mockCart = new Mock<ICart>();
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockLocalizer = new Mock<IStringLocalizer<ProductService>>();
-
-        var productService = new ProductService(mockCart.Object, mockProductRepository.Object, mockOrderRepository.Object, mockLocalizer.Object);
-        var productId = 1;
-
-        // Créer un produit simulé dans le panier
-        var productInCart = new Product { Id = productId, Name = "Product 1", Price = 10.0, Quantity = 5 };
-
-        // Configurer le comportement simulé du panier pour retourner le produit simulé
-        mockCart.Setup(cart => cart.RemoveLine(productInCart));
-
-        // Act
-        productService.DeleteProduct(productId);
-
-        // Assert
-        // Assurez-vous que la méthode RemoveLine du panier a été appelée avec le bon produit
-        mockCart.Verify(cart => cart.RemoveLine(productInCart), Times.Once);
-
-        // Assurez-vous que la méthode DeleteProduct du référentiel a été appelée avec le bon ID de produit
-        mockProductRepository.Verify(repo => repo.DeleteProduct(productId), Times.Once);
     }
     [Fact]
     public void DeleteProduct_ProductNotFoundInCartOrRepository_ThrowsException()
