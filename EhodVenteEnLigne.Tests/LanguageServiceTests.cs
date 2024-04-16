@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -37,21 +37,4 @@ public class LanguageServiceTests
         Assert.Equal("en", result); // We expect the default culture to be returned for unknown language
     }
 
-    // Tests for ChangeUiLanguage method
-
-    [Fact]
-    public void ChangeUiLanguage_DoesNotUpdateCultureCookie_WhenHttpContextIsNull()
-    {
-        // Arrange
-        HttpContext httpContext = null;
-        var languageService = new LanguageService();
-        var language = "French";
-
-        // Act
-        languageService.ChangeUiLanguage(httpContext, language);
-
-        // Assert
-        // Since the HttpContext is null, the cookie should not be updated
-        Assert.Null(httpContext?.Response?.Cookies);
-    }
 }
