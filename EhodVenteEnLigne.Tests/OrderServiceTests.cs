@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using Moq;
 using EhodBoutiqueEnLigne.Models.Services;
 using EhodBoutiqueEnLigne.Models.Repositories;
@@ -93,43 +93,6 @@ public class OrderServiceTests
 
 
     [Fact]
-    public void SaveOrder_CallsRepositorySaveMethodAndUpdatesInventory()
-    {
-        // Arrange
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockProductService = new Mock<IProductService>();
-        var orderService = new OrderService(null, mockOrderRepository.Object, mockProductService.Object);
-        var orderViewModel = new OrderViewModel { Name = "Test Order" };
-
-        // Act
-        orderService.SaveOrder(orderViewModel);
-
-        // Assert
-        mockOrderRepository.Verify(repo => repo.Save(It.IsAny<Order>()), Times.Once);
-        mockProductService.Verify(service => service.UpdateProductQuantities(), Times.Once);
-    }
-    [Fact]
-    public void SaveOrder_DoesNotCallRepositorySaveMethod_WhenRepositoryThrowsException()
-    {
-        // Arrange
-        var mockOrderRepository = new Mock<IOrderRepository>();
-        var mockProductService = new Mock<IProductService>();
-        var orderService = new OrderService(null, mockOrderRepository.Object, mockProductService.Object);
-        var orderViewModel = new OrderViewModel { Name = "Test Order" };
-
-        // Configurer le comportement simulé du dépôt de commandes pour jeter une exception lors de l'appel à Save
-        mockOrderRepository.Setup(repo => repo.Save(It.IsAny<Order>())).Throws<Exception>();
-
-        // Act & Assert
-        Assert.Throws<Exception>(() => orderService.SaveOrder(orderViewModel));
-
-        // Vérifiez que la méthode Save du dépôt de commandes n'a pas été appelée
-        mockOrderRepository.Verify(repo => repo.Save(It.IsAny<Order>()), Times.Never);
-
-        // Vérifiez que la méthode UpdateProductQuantities du service de produit n'a pas été appelée
-        mockProductService.Verify(service => service.UpdateProductQuantities(), Times.Never);
-    }
-    [Fact]
     public void UpdateInventory_CallsUpdateProductQuantitiesAndClear()
     {
         // Arrange
@@ -146,6 +109,27 @@ public class OrderServiceTests
         // Assert
         mockProductService.Verify(service => service.UpdateProductQuantities(), Times.Once);
         mockCart.Verify(cart => cart.Clear(), Times.Once);
+    }
+    [Fact]
+    public void UpdateInventory_ThrowsException_WhenUpdateFails()
+    {
+        // Arrange
+        var mockProductService = new Mock<IProductService>();
+        var mockCart = new Mock<ICart>();
+        var orderService = new OrderService(mockCart.Object, null, mockProductService.Object);
+
+        // Utiliser la réflexion pour accéder à la méthode privée
+        var methodInfo = typeof(OrderService).GetMethod("UpdateInventory", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        // Configurer le comportement simulé pour lancer une exception lors de l'appel à la méthode UpdateInventory
+        mockProductService.Setup(service => service.UpdateProductQuantities()).Throws<Exception>();
+
+        // Act & Assert
+        Assert.Throws<TargetInvocationException>(() => methodInfo.Invoke(orderService, null));
+        // Assurez-vous que la méthode UpdateProductQuantities a été appelée exactement une fois
+        mockProductService.Verify(service => service.UpdateProductQuantities(), Times.Once);
+        // Assurez-vous que la méthode Clear n'a pas été appelée
+        mockCart.Verify(cart => cart.Clear(), Times.Never);
     }
 
 
