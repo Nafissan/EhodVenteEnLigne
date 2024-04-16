@@ -1,32 +1,32 @@
-﻿@model EhodBoutiqueEnLigne.Models.ViewModels.OrderViewModel
+@model EhodBoutiqueEnLigne.Models.ViewModels.OrderViewModel
 
 <h2>@Localizer["OrderTitle"]</h2>
 <form asp-action="Index" method="post">
     <h3>@Localizer["ShipTo"]</h3>
     <div class="mb-3">
-        <span asp-validation-for="Name" class="text-danger"></span> <!-- Message d'erreur pour le champ Name -->
+        <span asp-validation-for="Name" class="text-danger"></span><br /> <!-- Message d'erreur pour le champ Name -->
         <label>@Localizer["Name"]*:</label>
         <input asp-for="Name" class="form-control" />
     </div>
     <h3>@Localizer["Address"]</h3>
     <div class="mb-3">
-        <span asp-validation-for="Address" class="text-danger"></span> <!-- Message d'erreur pour le champ Address -->
+        <span asp-validation-for="Address" class="text-danger"></span><br /> 
         <label>@Localizer["Location"]*:</label>
         <input asp-for="Address" class="form-control" />
     </div>
     <div class="row mb-3">
         <div class="col-4">
-            <span asp-validation-for="City" class="text-danger"></span> <!-- Message d'erreur pour le champ City -->
+            <span asp-validation-for="City" class="text-danger"></span><br /> 
             <label>@Localizer["City"]*:</label>
             <input asp-for="City" class="form-control" />
         </div>
         <div class="col-4">
-            <span asp-validation-for="Zip" class="text-danger"></span> <!-- Message d'erreur pour le champ Zip -->
+            <span asp-validation-for="Zip" class="text-danger"></span> <br /> 
             <label>@Localizer["Zip"]*:</label>
             <input asp-for="Zip" class="form-control" />
         </div>
         <div class="col-4">
-            <span asp-validation-for="Country" class="text-danger"></span> <!-- Message d'erreur pour le champ Country -->
+            <span asp-validation-for="Country" class="text-danger"></span><br /> 
             <label>@Localizer["Country"]*:</label>
             <input asp-for="Country" class="form-control" />
         </div>
